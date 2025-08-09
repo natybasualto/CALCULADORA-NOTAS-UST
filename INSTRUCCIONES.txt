@@ -1,0 +1,10 @@
+1) Sube estos archivos a la RAÍZ del repo:
+- apple-touch-icon.png
+- favicon.ico
+- favicon-32.png
+- favicon-16.png
+- icon-192.png
+- icon-512.png
+- site.webmanifest
+2) Agrega el snippet al <head> de tu index.html (SNIPPET-HEAD.html).
+3) Espera 1–2 min. Elimina el ícono antiguo del iPhone y vuelve a añadir a pantalla de inicio.

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CALCULADORA BLANCA</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calculadora de Notas (30/30/40) — Notion</title>
+  <style>
+    :root{
+      --text:#111827; --muted:#6b7280; --border:#e5e7eb; --card:#ffffff;
+      --primary:#111827; --primary-contrast:#ffffff;
+      --ok-bg:#ecfdf5; --ok-text:#065f46; --ok-bd:#a7f3d0;
+      --warn-bg:#fff7ed; --warn-text:#9a3412; --warn-bd:#fed7aa;
+      --bad-bg:#fef2f2; --bad-text:#991b1b; --bad-bd:#fecaca;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --text:#e5e7eb; --muted:#9aa3b2; --border:#2b2f36; --card:#111827;
+        --primary:#4f46e5; --primary-contrast:#ffffff;
+        --ok-bg:#052e1a; --ok-text:#86efac; --ok-bd:#064e3b;
+        --warn-bg:#3a1d06; --warn-text:#fed7aa; --warn-bd:#9a3412;
+        --bad-bg:#3f0b0b; --bad-text:#fecaca; --bad-bd:#991b1b;
+      }
+      body{color-scheme:dark;}
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;padding:24px;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;
+      background:transparent; /* se integra con el fondo de Notion */
+      color:var(--text);
+    }
+    .wrap{max-width:760px;margin:0 auto}
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:20px;
+      box-shadow:0 6px 18px rgba(0,0,0,.06);
+    }
+    h1{font-size:clamp(20px,3vw,28px);margin:0 0 8px}
+    p.small{color:var(--muted);margin:0 0 18px;font-size:14px;line-height:1.5}
+    label{display:block;margin:14px 0 6px;color:var(--text);font-weight:600}
+    input[type="text"]{
+      width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);
+      background:#fff;color:#111827;font-size:16px;outline:none;
+    }
+    @media (prefers-color-scheme: dark){
+      input[type="text"]{background:#0f172a;color:#e5e7eb}
+    }
+    input[type="text"]::placeholder{color:var(--muted)}
+    .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center}
+    button{
+      border:1px solid transparent;padding:12px 16px;border-radius:12px;
+      background:var(--primary);color:var(--primary-contrast);
+      font-weight:700;cursor:pointer
+    }
+    button.ghost{background:transparent;color:var(--text);border-color:var(--border)}
+    .out{margin-top:18px;padding:16px;border-radius:12px;background:#fff;border:1px solid var(--border)}
+    @media (prefers-color-scheme: dark){ .out{background:#0f172a} }
+    .badge{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:800;margin-left:10px;border:1px solid transparent}
+    .ok{background:var(--ok-bg);color:var(--ok-text);border-color:var(--ok-bd)}
+    .warn{background:var(--warn-bg);color:var(--warn-text);border-color:var(--warn-bd)}
+    .bad{background:var(--bad-bg);color:var(--bad-text);border-color:var(--bad-bd)}
+    .muted{color:var(--muted)}
+    .help{font-size:13px;color:var(--muted);margin-top:6px}
+    .weights{font-size:13px;color:var(--muted)}
+    .foot{margin-top:18px;font-size:12px;color:var(--muted)}
+    .flex{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Calculadora de Notas (30% / 30% / 40%)</h1>
+      <p class="small">
+        Ingresa tus tres notas y calcula tu promedio ponderado.
+        Reglas: <span class="weights">N1×0,30 + N2×0,30 + N3×0,40</span>.
+        Resultado: <strong>≥ 39,5 → "APROBADO"</strong>, <strong>35,0–39,4 → "A EXAMEN"</strong>, <strong>&lt; 35,0 → "REPROBADO"</strong>.
+      </p>
+
+      <div class="grid">
+        <div>
+          <label for="n1">Nota 1 (30%)</label>
+          <input id="n1" type="text" inputmode="decimal" placeholder="Ej: 45 o 4,5">
+          <div class="help">Se acepta punto o coma como separador decimal.</div>
+        </div>
+        <div>
+          <label for="n2">Nota 2 (30%)</label>
+          <input id="n2" type="text" inputmode="decimal" placeholder="Ej: 52 o 5,2">
+        </div>
+        <div>
+          <label for="n3">Nota 3 (40%)</label>
+          <input id="n3" type="text" inputmode="decimal" placeholder="Ej: 61 o 6,1">
+        </div>
+      </div>
+
+      <div class="row">
+        <button class="primary" id="calc">Calcular</button>
+        <button class="ghost" id="clear">Limpiar</button>
+        <span class="muted">Consejo: puedes presionar <kbd>Enter</kbd> en cualquier campo.</span>
+      </div>
+
+      <div id="out" class="out" aria-live="polite">
+        <div class="muted">Tu resultado aparecerá aquí.</div>
+      </div>
+
+      <div class="foot">Funciona con escala 1–7, 1–100 o similar: los cortes son 35,0 y 39,5 (equivalentes a 3,5 y 3,95).</div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const $ = (s) => document.querySelector(s);
+  const n1 = $("#n1"), n2 = $("#n2"), n3 = $("#n3"), out = $("#out");
+  const btnCalc = $("#calc"), btnClear = $("#clear");
+
+  function toNumber(v){
+    if (typeof v !== "string") v = String(v ?? "");
+    v = v.replace(",", ".").trim();
+    if (v === "") return NaN;
+    return Number(v);
+  }
+
+  function fmt1(x){
+    if (!isFinite(x)) return "—";
+    return x.toFixed(1).replace(".", ",");
+  }
+
+  function classify(avg){
+    if (!isFinite(avg)) return {label:"", cls:"", msg:""};
+    if (avg >= 39.5) return {label:"APROBADO", cls:"ok", msg:"¡Felicitaciones! Cumples el mínimo de aprobación (≥ 39,5)."};
+    if (avg >= 35) return {label:"A EXAMEN", cls:"warn", msg:"Debes rendir examen (entre 35,0 y 39,4)."};
+    return {label:"REPROBADO", cls:"bad", msg:"No alcanzas el mínimo para examen (< 35,0)."};
+  }
+
+  function calc(){
+    const a = toNumber(n1.value);
+    const b = toNumber(n2.value);
+    const c = toNumber(n3.value);
+
+    if ([a,b,c].some(x => isNaN(x))) {
+      out.innerHTML = '<span class="bad badge">ERROR</span> Ingresa las tres notas (pueden tener coma o punto).';
+      return;
+    }
+
+    const avg = a*0.30 + b*0.30 + c*0.40;
+    const cls = classify(avg);
+
+    out.innerHTML = `
+      <div class="flex">
+        <div>Promedio ponderado: <strong>${fmt1(avg)}</strong></div>
+        <span class="badge ${cls.cls}">${cls.label}</span>
+      </div>
+      <div class="help">${cls.msg}</div>
+    `;
+  }
+
+  function clearAll(){
+    n1.value = "";
+    n2.value = "";
+    n3.value = "";
+    out.innerHTML = '<div class="muted">Tu resultado aparecerá aquí.</div>';
+    n1.focus();
+  }
+
+  btnCalc.addEventListener("click", calc);
+  btnClear.addEventListener("click", clearAll);
+  [n1,n2,n3].forEach(el => {
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") calc();
+    });
+  });
+})();
+</script>
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
